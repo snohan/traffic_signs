@@ -1,0 +1,67 @@
+---
+title: "Trafikkskilt"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE
+  )
+
+library(tidyverse)
+library(gt)
+library(gtExtras)
+
+#
+```
+
+```{r data, include=FALSE}
+# Signs ----
+sign_folder <- 
+  "signs/"
+
+list_signs <-
+  list.files(sign_folder)
+
+signs <-
+  tibble::tibble(
+    name = list_signs,
+    path = paste0(sign_folder, name)
+  ) |> 
+  dplyr::filter(
+    name != "Thumbs.db"
+  ) 
+```
+
+
+```{r wide_table}
+dplyr::bind_cols(
+  signs$path[1:5],
+  signs$path[6:10],
+  signs$path[11:15],
+  signs$path[16:20],
+  .name_repair = "unique"
+) |> 
+gt::gt() |> 
+gtExtras::gt_img_rows(
+    columns = "...1",
+    height = 80
+) |> 
+  gtExtras::gt_img_rows(
+    columns = "...2",
+    height = 80
+) |> 
+  gtExtras::gt_img_rows(
+    columns = "...3",
+    height = 80
+) |> 
+  gtExtras::gt_img_rows(
+    columns = "...4",
+    height = 80
+) |> 
+gt::cols_width(
+  everything() ~ px(130)
+)
+```
+
